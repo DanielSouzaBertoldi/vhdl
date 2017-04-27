@@ -7,15 +7,15 @@ LIBRARY altera_mf;
 USE altera_mf.altera_mf_components.ALL;
 
 ENTITY Ifetch IS
-	PORT(	reset			: in STD_LOGIC;
-			clock			: in STD_LOGIC;
-			PC_out		: out STD_LOGIC_VECTOR(7 DOWNTO 0);
-			Instruction	: out STD_LOGIC_VECTOR(31 DOWNTO 0));
+	PORT(	reset		: IN  STD_LOGIC;
+		clock		: IN  STD_LOGIC;
+		PC_out		: OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+		Instruction	: OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
 END Ifetch;
 
 ARCHITECTURE behavior OF Ifetch IS
-SIGNAL PC			: STD_LOGIC_VECTOR(7 DOWNTO 0);
-SIGNAL Next_PC		: STD_LOGIC_VECTOR(7 DOWNTO 0);
+SIGNAL PC	: STD_LOGIC_VECTOR(7 DOWNTO 0);
+SIGNAL Next_PC	: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL PC_inc	: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL Mem_Addr	: STD_LOGIC_VECTOR(7 DOWNTO 0);
 
@@ -24,15 +24,15 @@ BEGIN
 	data_memory: altsyncram -- Declaracao do compomente de memoria
 	GENERIC MAP(
 		operation_mode	=> "ROM",
-		width_a			=> 32, -- tamanho da palavra (Word)
-		widthad_a		=> 8,   -- tamanho do barramento de endereco
-		lpm_type			=> "altsyncram",
+		width_a		=> 32, -- tamanho da palavra (Word)
+		widthad_a	=> 8,   -- tamanho do barramento de endereco
+		lpm_type	=> "altsyncram",
 		outdata_reg_a	=> "UNREGISTERED",
-		init_file		=> "programT.mif",  -- arquivo com estado inicial
+		init_file	=> "programT.mif",  -- arquivo com estado inicial
 		intended_device_family => "Cyclone")
 	PORT MAP(
 		address_a	=> Mem_Addr,
-		q_a			=> Instruction,
+		q_a		=> Instruction,
 		clock0		=> clock);  -- sinal de clock da memoria
 	
 	-- Descricao do somador
