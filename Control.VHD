@@ -27,9 +27,7 @@ BEGIN
 	--Ativa as saidas pro DMEMORY
 	MemRead  <= I_format;
 	MemToReg <= I_format;
-	MemWrite	<=	I_format;
-	ALUSrc	<=	I_format;
+	MemWrite <= I_format;
+	ALUSrc	 <= I_format;
 	
    END behavior;
-
-
