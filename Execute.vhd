@@ -5,8 +5,8 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 ENTITY Execute IS
 	  PORT(	read_data_1	: IN STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				read_data_2	: IN STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				ALU_result	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 ));
+		read_data_2	: IN STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+		ALU_result	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 ));
 END Execute;
 
 ARCHITECTURE behavior OF Execute IS
