@@ -21,9 +21,9 @@ BEGIN
 	R_format <= '1' WHEN Opcode = "000000" ELSE '0';
 	
 	I_format <= '1' WHEN Opcode = "100011" ELSE
-					'1' WHEN Opcode = "101011" ELSE
-					'1' WHEN Opcode = "000100" ELSE
-					'0';
+		    '1' WHEN Opcode = "101011" ELSE
+		   '1' WHEN Opcode = "000100" ELSE
+		    '0';
 	
 	RegDst	 <= R_format;
 	RegWrite <= R_format; --Se R_format for verdadeiro, RegWrite vira verdadeiro
