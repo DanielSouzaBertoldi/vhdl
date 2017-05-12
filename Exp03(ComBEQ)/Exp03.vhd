@@ -103,7 +103,7 @@ BEGIN
 	-- Inserir MUX para DisplayData
 	DisplayData <= read_data WHEN InstrALU = '1' ELSE DataInstr;
 	
-	HexDisplayDT <= PCAddr&"0000"&DisplayData;
+	HexDisplayDT <= "0000"&PCAddr&DisplayData;
 
 	lcd: LCD_Display
 	PORT MAP(	reset				=> reset,
