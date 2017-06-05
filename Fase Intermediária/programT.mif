@@ -20,7 +20,7 @@ Begin
 	09: 0BFFFFB4;	-- j -44  		<- volta ao inicio do programa
 	0A: 1021FFF9;	-- beq $1,$1, 28 
 	0B: 0BFFFFCC;   -- j -52  		<- volta ao inicio do programa
-	0C: 0FFFFFE8;   -- jal 24 		<-volta para a instrucao 06, que retorna ao inicio do programa
+	0C: 0FFFFFE8;   -- jal -24 		<-volta para a instrucao 06, que retorna ao inicio do programa
 	[0D..FF]: 00000000; -- nop (sll r0,r0,0)
 
 End;
