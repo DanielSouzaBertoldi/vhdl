@@ -1,0 +1,37 @@
+-- MIPS Instruction Memory Initialization File
+Depth = 256;
+Width = 32;
+Address_radix = HEX;
+Data_radix = HEX;
+Content
+Begin
+-- Place MIPS Instructions here
+-- Note: memory addresses are in words and not bytes
+-- i.e. next location is +1 and not +4
+	00: 8C020000; 	-- lw $2,0 ;memory(00)=55
+	01: 8C030001; 	-- lw $3,1 ;memory(01)=AA
+	02: 00430820; 	-- add $1,$2,$3
+	03: AC010003; 	-- sw $1,3 ;memory(03)=FF
+	04: 8C040003; 	-- lw $4,3 ;memory(03)=FFFFFFFF
+	05: 14220004; 	-- bne $1,$2,4 <- pula a instrucao 7 se $1 != $2 (4 posicoes a frente)
+	06: 08000000; 	-- j 00: <- volta ao inicio do programa (se essa bagaça aceitasse o endereco (0x0000000) ao inves de posicoes a serem puladas)
+	07: 08000008;	-- j 10: <- pula para o endereco 10 (2 palavras a frente, portanto, 8 (???? n sei se ta certo))
+	08: 08000000;   -- j 00: <- volta ao inicio do programa (se aceitasse endereco, porem tem que pular -40 palavras, 10 instrucoes pra tras)
+	09: 08000000;	-- j 00: <- volta ao inicio do programa (se aceitasse endereco, tem que pular -44 palavras, 11 intrucoes pra tras)
+	0A: 1021FFF9;	-- beq $1,$1, -28 <- essa linha estava no codigo exemplo que ela passou no beq, que pula 7 palavras para tras. Nesse caso, deveria pular para a instrucao 12 
+	0B: 08000000;   -- j 00: <- deveria pular -48 palavras
+	0C: xxxxxxxx;   -- ultima instrucao deveria fazer um jal (opcode = 2) para qualquer outra instrucao, ainda n fiz pq to bugado nessas de calcular o numero de posicoes a serem puladas
+	[0D..FF]: 00000000; -- nop (sll r0,r0,0)
+
+End;
+
+--	EXEMPLO DO BEQ Q ELA PASSOU NA ULTIMA FASE
+--	00: 8C020000; 	-- lw $2,0 ;memory(00)=55
+--	01: 8C030001; 	-- lw $3,1 ;memory(01)=AA
+--	02: 00430820; 	-- add $1,$2,$3
+--	03: AC010003; 	-- sw $1,3 ;memory(03)=FF
+--	04: 8C040003; 	-- lw $4,3 ;memory(03)=FFFFFFFF
+--	05: 1022FFFF; 	-- beq $1,$2,-4
+--	06: 1021FFF9; 	-- beq $1,$1,-28
+	-- Use NOPS for default instruction memory values
+--	[07..FF]: 00000000; -- nop (sll r0,r0,0)
