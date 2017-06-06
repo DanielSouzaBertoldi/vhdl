@@ -23,9 +23,10 @@ END Execute;
 ARCHITECTURE behavior OF Execute IS
 -- *** ACRESCENTE A DECLARAÇÃO DE AINPUT
 SIGNAL AInput				: STD_LOGIC_VECTOR(31 DOWNTO 0 );
-SIGNAL ALU_ctl				: STD_LOGIC_VECTOR(2 DOWNTO 0);
+SIGNAL ALU_ctl				: STD_LOGIC_VECTOR( 2 DOWNTO 0 );
 SIGNAL BInput				: STD_LOGIC_VECTOR(31 DOWNTO 0 );
 SIGNAL ALU_output_mux	: STD_LOGIC_VECTOR(31 DOWNTO 0 );
+
 BEGIN
 	-- *** ACRESCENTE A ATRIBUIÇÃO A AINPUT
 	AInput <= read_data_1;
@@ -41,9 +42,12 @@ BEGIN
 	
 	Zero <= '1' WHEN ( ALU_output_mux( 31 DOWNTO 0 ) = X"00000000" ) ELSE '0';
 	
+	--Calcula próximo endereco de acordo com o SignExtend (endereco de pulo)
+	ADDResult <= PC + 1 + SignExtend(7 DOWNTO 0);
+	
 	ALU_result <= X"0000000"&B"000"&ALU_output_mux( 31 ) WHEN  ALU_ctl = "111" 
-					  ELSE  	ALU_output_mux( 31 DOWNTO 0 );					
-		
+					  ELSE  	ALU_output_mux( 31 DOWNTO 0 );
+
 	PROCESS ( ALU_ctl, Ainput, Binput )
 	BEGIN
 	-- Select ALU operation
