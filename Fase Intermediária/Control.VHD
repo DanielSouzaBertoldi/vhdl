@@ -11,6 +11,9 @@ ENTITY control IS
 			MemRead		: OUT 	STD_LOGIC;
 			MemWrite		: OUT 	STD_LOGIC;
 			Beq			: INOUT 	STD_LOGIC;
+			Bne			: INOUT 	STD_LOGIC;
+			Jump			: INOUT  STD_LOGIC;
+			Jal			: INOUT 	STD_LOGIC;
 			-- *** Acrescentar a linha abaixo a sua unidade para selecionar as operações
 			-- Será mapeado para o execute
 			ALUOp 		: OUT STD_LOGIC_VECTOR( 1 DOWNTO 0 ));
@@ -28,6 +31,9 @@ BEGIN
   	SW				<=  '1' 	WHEN  Opcode = "101011" ELSE '0';
 	LW				<=  '1' 	WHEN  Opcode = "100011" ELSE '0';
 	Beq			<=	 '1'  WHEN	Opcode = "000100" ELSE '0';
+	Bne			<=	 '1'  WHEN  Opcode = "000101" ELSE '0';
+	Jump			<=  '1' 	WHEN  Opcode = "000010" ELSE '0';
+	Jal			<=  '1'  WHEN  Opcode = "000011" ELSE '0';
 	
 	RegDst    	<=  R_format;
   	RegWrite 	<=  R_format OR LW;

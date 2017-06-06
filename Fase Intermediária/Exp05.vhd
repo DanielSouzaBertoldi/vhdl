@@ -29,44 +29,55 @@ COMPONENT Ifetch
 			Instruction	: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 			ADDResult	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0);
 			Beq			: IN	STD_LOGIC;
-			Zero			: IN	STD_LOGIC);
+			Bne			: IN 	STD_LOGIC;
+			Zero			: IN	STD_LOGIC;
+			Jump			: IN  STD_LOGIC;
+			Jal			: IN  STD_LOGIC;
+			J_Address	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0));
+
 END COMPONENT;
 
 COMPONENT Idecode
-	PORT(		read_data_1	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				read_data_2	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				Instruction : IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				ALU_result	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				RegWrite 	: IN 	STD_LOGIC;
-				RegDst 		: IN 	STD_LOGIC;
-				Sign_extend : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				clock,reset	: IN 	STD_LOGIC; 
-				MemToReg		: IN	STD_LOGIC;
-				read_data	: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 ));
+	PORT(		read_data_1		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				read_data_2		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				Instruction 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				ALU_result		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				RegWrite 		: IN 	STD_LOGIC;
+				RegDst 			: IN 	STD_LOGIC;
+				Sign_extend 	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				clock,reset		: IN 	STD_LOGIC; 
+				MemToReg			: IN	STD_LOGIC;
+				read_data		: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				Jal				: IN  STD_LOGIC;
+				L_Address		: IN	STD_LOGIC_VECTOR(  7 DOWNTO 0 ));
 END COMPONENT;
 
 COMPONENT Execute
 	  PORT(	read_data_1		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				read_data_2		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				ALU_result		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				SignExtend 		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				ALUSrc			: IN 	STD_LOGIC;
+				SignExtend 		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				PC					: IN	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
 				Zero				: OUT STD_LOGIC;
 				ADDResult		: OUT STD_LOGIC_VECTOR( 7 DOWNTO 0 );
-				PC					: IN	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
 				ALUOp				: IN STD_LOGIC_VECTOR( 1 DOWNTO 0);
 				Function_opcode: IN 	STD_LOGIC_VECTOR( 5 DOWNTO 0 ));
 END COMPONENT;
 
 COMPONENT Control
-  PORT( 	Opcode 		: IN 	STD_LOGIC_VECTOR( 5 DOWNTO 0 );
-			RegDst 		: OUT STD_LOGIC;
-			RegWrite 	: OUT STD_LOGIC;
-			MemRead		: OUT	STD_LOGIC;
-			MemWrite		: OUT	STD_LOGIC;
-			MemToReg		: OUT	STD_LOGIC;
-			ALUSrc		: OUT STD_LOGIC;
-			Beq			: OUT STD_LOGIC);
+  PORT( 	Opcode 		: IN 		STD_LOGIC_VECTOR( 5 DOWNTO 0 );
+			RegDst 		: OUT 	STD_LOGIC;
+			RegWrite 	: OUT 	STD_LOGIC;
+			ALUSrc		: OUT 	STD_LOGIC;
+			MemToReg		: OUT		STD_LOGIC;
+			MemRead		: OUT		STD_LOGIC;
+			MemWrite		: OUT		STD_LOGIC;
+			Beq			: INOUT 	STD_LOGIC;
+			Bne			: INOUT 	STD_LOGIC;
+			Jump			: INOUT  STD_LOGIC;
+			Jal			: INOUT 	STD_LOGIC;
+			ALUOp 		: OUT 	STD_LOGIC_VECTOR( 1 DOWNTO 0 ));
 END COMPONENT;
 
 COMPONENT dmemory
@@ -94,8 +105,11 @@ SIGNAL ALUSrc			: STD_LOGIC;
 SIGNAL read_data		: STD_LOGIC_VECTOR(31 DOWNTO 0);
 SIGNAL ADDResult		: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL Beq				: STD_LOGIC;
+SIGNAL Bne				: STD_LOGIC;
 SIGNAL Zero				: STD_LOGIC;
 SIGNAL clock			: STD_LOGIC;
+SIGNAL Jump				: STD_LOGIC;
+SIGNAL Jal				: STD_LOGIC;
 SIGNAL ALUOp			: STD_LOGIC_VECTOR(1 DOWNTO 0);
 
 BEGIN
@@ -120,9 +134,13 @@ BEGIN
 					clock 		=> clock,
 					PC_out		=> PCAddr,
 					Instruction	=> DataInstr,
+					ADDResult	=> ADDResult,
 					Beq			=> Beq,
+					Bne			=> Bne,
 					Zero			=> Zero,
-					ADDResult	=> ADDResult);
+					Jump			=> Jump,
+					Jal			=> Jal,
+					J_Address	=> DataInstr(7 DOWNTO 0));
 
 	CTR: Control
    PORT MAP( 	Opcode 		=> DataInstr(31 DOWNTO 26),
@@ -132,33 +150,39 @@ BEGIN
 					MemWrite		=> MemWrite,
 					MemToReg		=> MemToReg,
 					ALUSrc		=> ALUSrc,
-					Beq			=> Beq);
+					Beq			=> Beq,
+					Bne			=> Bne,
+					Jump			=> Jump,
+					Jal			=> Jal,
+					ALUOp 		=> ALUOp(1 DOWNTO 0));
 
 	IDEC: Idecode
-	PORT MAP( 	read_data_1	=> readData1,
-					read_data_2	=> readData2,
-					Instruction => dataInstr,
-					ALU_result	=> ALUResult,
-					RegWrite 	=> RegWrite,
-					RegDst 		=> RegDst,
-					Sign_extend => SignExtend,
-					clock			=> clock,
-					reset			=> reset,
-					MemToReg		=> MemToReg,
-					read_data	=> read_data);
-
+	PORT MAP( 	read_data_1		=> readData1,
+					read_data_2		=> readData2,
+					Instruction 	=> dataInstr,
+					ALU_result		=> ALUResult,
+					RegWrite 		=> RegWrite,
+					RegDst 			=> RegDst,
+					Sign_extend 	=> SignExtend,
+					clock				=> clock,
+					reset				=> reset,
+					MemToReg			=> MemToReg,
+					read_data		=> read_data,
+					Jal				=> Jal,
+					L_Address		=> DataInstr(7 DOWNTO 0));
+					
 	EXE: Execute
 	PORT MAP(	read_data_1		 => readData1,
 					read_data_2		 => readData2,
 					ALU_result		 => ALUResult,
-					SignExtend		 => SignExtend,
 					ALUSrc			 => ALUSrc,
+					SignExtend		 => SignExtend,
+					PC					 => PCAddr,
 					Zero			 	 => Zero,
 					ADDResult		 => ADDResult,
-					PC					 => PCAddr,
-					Function_opcode => DataInstr(5 DOWNTO 0),
-					ALUOp				 => ALUOp);
-
+					ALUOp				 => ALUOp,
+					Function_opcode => DataInstr( 5 DOWNTO 0 ));
+					
 	DMEM: dmemory
 	PORT MAP(	read_data	=> read_data,
 					address 		=> ALUResult(7 DOWNTO 0),

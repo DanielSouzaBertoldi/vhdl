@@ -13,7 +13,11 @@ ENTITY Ifetch IS
 			Instruction	: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 			ADDResult	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0);
 			Beq			: IN	STD_LOGIC;
-			Zero			: IN	STD_LOGIC);
+			Bne			: IN 	STD_LOGIC;
+			Zero			: IN	STD_LOGIC;
+			Jump			: IN  STD_LOGIC;
+			Jal			: IN  STD_LOGIC;
+			J_Address	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0));
 END Ifetch;
 
 ARCHITECTURE behavior OF Ifetch IS
@@ -55,8 +59,15 @@ BEGIN
    -- Usar o Next_PC ao inves do PC porque a memoria tem um registrador de entrada interno
 	-- Entao o PC tem que ser atualizado simultaneamente com o reg interno da memoria
 	Mem_Addr <= Next_PC;
-	Next_PC <= 	"00000000" WHEN reset='1' ELSE
-					ADDResult  WHEN Beq = '1' AND Zero = '1' ELSE
+	Next_PC <= 	"00000000" WHEN reset = '1' ELSE
+					
+					--Deve-se somar o endereço do pulo caso seja Beq ou Bne
+					ADDResult  WHEN (Beq = '1' AND Zero = '1') OR (Bne = '1' AND Zero = '0') ELSE
+					
+					--Deve-se receber o endereco requisitado caso seja uma instrucao de pulo incondicional
+					J_Address WHEN Jump = '1' OR Jal = '1' ELSE
+					
+					--Caso nao seja nenhuma instrucao de pulo, continua normalmente
 					PC_inc;
 	PC_out <= PC;
 

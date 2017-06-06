@@ -5,16 +5,18 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 
 ENTITY Idecode IS
-	  PORT(	read_data_1	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				read_data_2	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				Instruction : IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				ALU_result	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				RegWrite 	: IN 	STD_LOGIC;
-				RegDst 		: IN 	STD_LOGIC;
-				Sign_extend : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-				clock,reset	: IN 	STD_LOGIC; 
-				MemToReg		: IN	STD_LOGIC;
-				read_data	: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 ));
+	  PORT(	read_data_1		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				read_data_2		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				Instruction 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				ALU_result		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				RegWrite 		: IN 	STD_LOGIC;
+				RegDst 			: IN 	STD_LOGIC;
+				Sign_extend 	: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				clock,reset		: IN 	STD_LOGIC; 
+				MemToReg			: IN	STD_LOGIC;
+				read_data		: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				Jal				: IN  STD_LOGIC;
+				L_Address		: IN	STD_LOGIC_VECTOR(  7 DOWNTO 0 ));
 END Idecode;
 
 ARCHITECTURE behavior OF Idecode IS
@@ -72,6 +74,9 @@ PROCESS
 			FOR i IN 0 TO 31 LOOP
 				registrator(i) <= CONV_STD_LOGIC_VECTOR( i, 32 ); --i e um inteiro, registrator e apenas em bits, portanto precisamos converter
  			END LOOP;
+		--O registrador 32, $ra, armazena o endereço da próxima instrução antes do pulo
+		ELSIF Jal = '1' THEN
+			registrator(31) <= X"000000"&L_Address;
   		ELSIF RegWrite = '1' AND write_reg_ID /= X"00" THEN
 		   -- Escreve no registrador indicado pela instrucao
 			registrator(CONV_INTEGER(write_reg_ID)) <= write_data;
