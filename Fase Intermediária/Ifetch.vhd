@@ -7,23 +7,23 @@ LIBRARY altera_mf;
 USE altera_mf.altera_mf_components.ALL;
 
 ENTITY Ifetch IS
-	PORT(	reset			: IN  STD_LOGIC;
-			clock			: IN  STD_LOGIC;
-			PC_out		: OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			Instruction	: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-			ADDResult	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0);
-			Beq			: IN	STD_LOGIC;
-			Bne			: IN 	STD_LOGIC;
-			Zero			: IN	STD_LOGIC;
-			Jump			: IN  STD_LOGIC;
-			Jal			: IN  STD_LOGIC;
-			J_Address	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0));
+	PORT(	reset			: IN  	STD_LOGIC;
+			clock			: IN  	STD_LOGIC;
+			PC_out		: OUT 	STD_LOGIC_VECTOR(7 DOWNTO 0);
+			Instruction	: OUT 	STD_LOGIC_VECTOR(31 DOWNTO 0);
+			ADDResult	: IN		STD_LOGIC_VECTOR(7 DOWNTO 0);
+			Beq			: IN		STD_LOGIC;
+			Bne			: IN 		STD_LOGIC;
+			Zero			: IN		STD_LOGIC;
+			Jump			: IN  	STD_LOGIC;
+			Jal			: IN  	STD_LOGIC;
+			PC_inc		: INOUT 	STD_LOGIC_VECTOR(7 DOWNTO 0);
+			J_Address	: IN		STD_LOGIC_VECTOR(7 DOWNTO 0));
 END Ifetch;
 
 ARCHITECTURE behavior OF Ifetch IS
 SIGNAL PC			: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL Next_PC		: STD_LOGIC_VECTOR(7 DOWNTO 0);
-SIGNAL PC_inc		: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL Mem_Addr	: STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 BEGIN

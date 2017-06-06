@@ -23,17 +23,18 @@ COMPONENT LCD_Display
 END COMPONENT;
 
 COMPONENT Ifetch
-	PORT(	reset			: IN 	STD_LOGIC;
-			clock			: IN 	STD_LOGIC;
-			PC_out		: OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			Instruction	: OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-			ADDResult	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0);
-			Beq			: IN	STD_LOGIC;
-			Bne			: IN 	STD_LOGIC;
-			Zero			: IN	STD_LOGIC;
-			Jump			: IN  STD_LOGIC;
-			Jal			: IN  STD_LOGIC;
-			J_Address	: IN	STD_LOGIC_VECTOR(7 DOWNTO 0));
+	PORT(	reset			: IN 		STD_LOGIC;
+			clock			: IN 		STD_LOGIC;
+			PC_out		: OUT 	STD_LOGIC_VECTOR(7 DOWNTO 0);
+			Instruction	: OUT 	STD_LOGIC_VECTOR(31 DOWNTO 0);
+			ADDResult	: IN		STD_LOGIC_VECTOR(7 DOWNTO 0);
+			Beq			: IN		STD_LOGIC;
+			Bne			: IN 		STD_LOGIC;
+			Zero			: IN		STD_LOGIC;
+			Jump			: IN  	STD_LOGIC;
+			Jal			: IN  	STD_LOGIC;
+			PC_inc		: INOUT 	STD_LOGIC_VECTOR(7 DOWNTO 0);
+			J_Address	: IN		STD_LOGIC_VECTOR(7 DOWNTO 0));
 
 END COMPONENT;
 
@@ -110,6 +111,7 @@ SIGNAL Zero				: STD_LOGIC;
 SIGNAL clock			: STD_LOGIC;
 SIGNAL Jump				: STD_LOGIC;
 SIGNAL Jal				: STD_LOGIC;
+SIGNAL PC_inc			: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL ALUOp			: STD_LOGIC_VECTOR(1 DOWNTO 0);
 
 BEGIN
@@ -140,6 +142,7 @@ BEGIN
 					Zero			=> Zero,
 					Jump			=> Jump,
 					Jal			=> Jal,
+					PC_inc		=> PC_inc,
 					J_Address	=> DataInstr(7 DOWNTO 0));
 
 	CTR: Control
@@ -169,7 +172,7 @@ BEGIN
 					MemToReg			=> MemToReg,
 					read_data		=> read_data,
 					Jal				=> Jal,
-					L_Address		=> DataInstr(7 DOWNTO 0));
+					L_Address		=> PC_inc);
 					
 	EXE: Execute
 	PORT MAP(	read_data_1		 => readData1,
