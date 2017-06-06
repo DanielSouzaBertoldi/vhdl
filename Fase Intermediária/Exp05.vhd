@@ -2,22 +2,21 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Exp05 IS
-	PORT(	reset				: IN 	STD_LOGIC;
-			clock48MHz		: IN 	STD_LOGIC;
-			LCD_RS, LCD_E	: OUT	STD_LOGIC;
+	PORT(	reset				: IN 		STD_LOGIC;
+			clock48MHz		: IN 		STD_LOGIC;
+			LCD_RS, LCD_E	: OUT		STD_LOGIC;
 			LCD_RW, LCD_ON	: OUT 	STD_LOGIC;
 			DATA				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
-			--clock				: IN 	STD_LOGIC;
-			InstrALU			: IN 	STD_LOGIC;
-			clockPB			: IN  STD_LOGIC);
+			InstrALU			: IN 		STD_LOGIC;
+			clockPB			: IN  	STD_LOGIC);
 END Exp05;
 
 ARCHITECTURE exec OF Exp05 IS
 COMPONENT LCD_Display
 	GENERIC(NumHexDig: Integer:= 11);
-	PORT(	reset, clk_48Mhz	: IN	STD_LOGIC;
+	PORT(	reset, clk_48Mhz	: IN		STD_LOGIC;
 			HexDisplayData		: IN  	STD_LOGIC_VECTOR((NumHexDig*4)-1 DOWNTO 0);
-			LCD_RS, LCD_E		: OUT	STD_LOGIC;
+			LCD_RS, LCD_E		: OUT		STD_LOGIC;
 			LCD_RW				: OUT 	STD_LOGIC;
 			DATA_BUS				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0));
 END COMPONENT;
@@ -119,8 +118,10 @@ BEGIN
 
 	clock <= NOT clockPB;
 	
-	-- Inserir MUX para DisplayData				
-	HexDisplayDT <= "0000" & PCAddr & DisplayData;
+	-- Inserir MUX para DisplayData
+	DisplayData <= DataInstr WHEN InstrALU = '0' ELSE ALUResult;
+	
+	HexDisplayDT <= "0000"&PCAddr&DisplayData;
 
 	lcd: LCD_Display
 	PORT MAP(	reset				=> reset,
