@@ -1,0 +1,16 @@
+-- MIPS Instruction Memory Initialization File
+Depth = 256;
+Width = 32;
+Address_radix = HEX;
+Data_radix = HEX;
+Content
+Begin
+-- Place MIPS Instructions here
+-- Note: memory addresses are in words and not bytes
+-- i.e. next location is +1 and not +4
+	00: 0C100002;   -- jal 02
+    01: 01084020;   -- add $t0, $t0, $t0
+    02: 03E00008;   -- jr $ra
+	03: 08100000;	-- j 00
+    [04..FF] : 00000000;
+End;
