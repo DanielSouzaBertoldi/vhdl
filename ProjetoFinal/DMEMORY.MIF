@@ -1,0 +1,19 @@
+--  MIPS Data Memory Initialization File
+depth=256;
+width=32;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+Content
+Begin
+-- initial values for test program
+	00: 00000006;  -- Tamanho do vetor (6)
+	01: 00000005;  -- Valor 1 (5)
+	02: 00000002;  -- Valor 2 (2)
+	03: 00000014;  -- Valor 3 (20)
+	04: FFFFFFFB;  -- Valor 4 (-5)
+	05: FFFFFFFE;  -- Valor 5 (-2)
+	06: FFFFFFEC;  -- Valor 6 (-20)
+	[07..FF]: 00000000;
+End;

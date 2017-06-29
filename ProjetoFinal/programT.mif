@@ -1,0 +1,35 @@
+-- MIPS Instruction Memory Initialization File
+Depth = 256;
+Width = 32;
+Address_radix = HEX;
+Data_radix = HEX;
+Content
+Begin
+-- Place MIPS Instructions here
+-- Note: memory addresses are in words and not bytes
+-- i.e. next location is +1 and not +4
+	00: 8C0F0000;  -- lw $t7, 0($zero)
+	01: 11E00011;  -- beq $t7, $zero, Fim
+	02: 8C0E0001;  -- lw $t6, 4($zero)
+	03: 000E3820;  -- add $a3, $zero, $t6
+	04: 000E3020;  -- add $a2, $zero, $t6
+	05: 000E2820;  -- add $a1, $zero, $t6
+	06: 200D0001;  -- addi $t5, $zero, 4
+		-- Loop:
+	07: 11AF000A;  -- beq $t5, $t7, Fim
+	08: 8DAE0001;  -- lw $t6, 4($t5)
+	09: 00EE402A;  -- slt $t0, $a3, $t6
+	0A: 11000001;  -- beq $t0, $zero, NãoÉMaior
+	0B: 000E3820;  -- add $a3, $zero, $t6
+		-- NãoÉMaior:
+	0C: 01C6402A;  -- slt $t0, $t6, $a2
+	0D: 11000001;  -- beq $t0, $zero, NãoÉMenor
+	0E: 000E3020;  -- add $a2, $zero, $t6
+		-- NãoÉMenor:
+	0F: 00AE2820;  -- add $a1, $a1, $t6
+	10: 21AD0001;  -- addi $t5, $t5, 4
+	11: 08100007;  -- j Loop
+		-- Fim:
+	12: 00000000;  -- nop
+	[13..FF] : 00000000;
+End;
