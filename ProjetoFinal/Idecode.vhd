@@ -17,7 +17,10 @@ ENTITY Idecode IS
 				read_data		: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				Jal				: IN  STD_LOGIC;
 				L_Address		: IN	STD_LOGIC_VECTOR(  7 DOWNTO 0 );
-				Reg31				: OUT STD_LOGIC_VECTOR(  7 DOWNTO 0 ));
+				Reg31				: OUT STD_LOGIC_VECTOR(  7 DOWNTO 0 );
+				a1					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+				a2					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+				a3					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
 END Idecode;
 
 ARCHITECTURE behavior OF Idecode IS
@@ -27,7 +30,7 @@ ARCHITECTURE behavior OF Idecode IS
 	TYPE register_file IS ARRAY (0 TO 31) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 	--<insira os sinais internos necessários>
-	SIGNAL registrator 		: register_file;
+	SIGNAL registrator 		:	register_file;
 	SIGNAL write_reg_ID		:	STD_LOGIC_VECTOR(4 DOWNTO 0);
 	SIGNAL write_data			:	STD_LOGIC_VECTOR(31 DOWNTO 0);
 	SIGNAL read_Rs_ID			:	STD_LOGIC_VECTOR(4 DOWNTO 0);
@@ -70,6 +73,10 @@ BEGIN
 		--Reg31 recebe o endereco contido no registrador 31
 		RegEndereco <= registrator(31);
 		Reg31			<= RegEndereco(7 DOWNTO 0);
+		
+		a1 <= registrator(5);
+		a2 <= registrator(6);
+		a3 <= registrator(7);
 		
 	--Process é um FF
 PROCESS

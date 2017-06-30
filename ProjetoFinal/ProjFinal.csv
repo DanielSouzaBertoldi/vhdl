@@ -1,0 +1,39 @@
+# Copyright (C) 1991-2012 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+
+# Quartus II 32-bit Version 12.1 Build 243 01/31/2013 Service Pack 1 SJ Web Edition
+# File: D:\UFSCar\Laboratorio Arquitetura\PROJETO_FINAL\ProjFinal.csv
+# Generated on: Fri Jun 30 01:06:25 2017
+
+# Note: The column header names should not be changed if you wish to import this .csv file into the Quartus II software.
+
+To,Direction,Location,I/O Bank,VREF Group,Fitter Location,I/O Standard,Reserved,Current Strength,Differential Pair
+clock48MHz,Input,PIN_N2,2,B2_N1,PIN_P1,,,,
+clockPB,Input,PIN_G26,5,B5_N0,PIN_P2,,,,
+DATA[7],Bidir,PIN_H3,2,B2_N1,PIN_D11,,,,
+DATA[6],Bidir,PIN_H4,2,B2_N1,PIN_D12,,,,
+DATA[5],Bidir,PIN_J3,2,B2_N1,PIN_D10,,,,
+DATA[4],Bidir,PIN_J4,2,B2_N1,PIN_C10,,,,
+DATA[3],Bidir,PIN_H2,2,B2_N1,PIN_J14,,,,
+DATA[2],Bidir,PIN_H1,2,B2_N1,PIN_E12,,,,
+DATA[1],Bidir,PIN_J2,2,B2_N1,PIN_G11,,,,
+DATA[0],Bidir,PIN_J1,2,B2_N1,PIN_A10,,,,
+InstrALU[2],Input,PIN_V2,1,B1_N0,PIN_D13,,,,
+InstrALU[1],Input,PIN_V1,1,B1_N0,PIN_D14,,,,
+InstrALU[0],Input,PIN_U4,1,B1_N0,PIN_C12,,,,
+LCD_E,Output,PIN_K3,2,B2_N1,PIN_A14,,,,
+LCD_ON,Output,PIN_L4,2,B2_N1,PIN_AB3,,,,
+LCD_RS,Output,PIN_K1,2,B2_N1,PIN_B10,,,,
+LCD_RW,Output,PIN_K4,2,B2_N1,PIN_J13,,,,
+reset,Input,PIN_N25,5,B5_N1,PIN_C13,,,,

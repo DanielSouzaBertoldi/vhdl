@@ -7,7 +7,7 @@ ENTITY ProjFinal IS
 			LCD_RS, LCD_E	: OUT		STD_LOGIC;
 			LCD_RW, LCD_ON	: OUT 	STD_LOGIC;
 			DATA				: INOUT	STD_LOGIC_VECTOR(7 DOWNTO 0);
-			InstrALU			: IN 		STD_LOGIC;
+			InstrALU			: IN 		STD_LOGIC_VECTOR(2 DOWNTO 0);
 			clockPB			: IN  	STD_LOGIC);
 END ProjFinal;
 
@@ -40,7 +40,7 @@ COMPONENT Ifetch
 END COMPONENT;
 
 COMPONENT Idecode
-	PORT(		read_data_1		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+	  PORT(	read_data_1		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				read_data_2		: OUT STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				Instruction 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				ALU_result		: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
@@ -52,7 +52,10 @@ COMPONENT Idecode
 				read_data		: IN	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				Jal				: IN  STD_LOGIC;
 				L_Address		: IN	STD_LOGIC_VECTOR(  7 DOWNTO 0 );
-				Reg31				: OUT STD_LOGIC_VECTOR(  7 DOWNTO 0 ));
+				Reg31				: OUT STD_LOGIC_VECTOR(  7 DOWNTO 0 );
+				a1					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+				a2					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+				a3					: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
 END COMPONENT;
 
 COMPONENT Execute
@@ -126,6 +129,9 @@ SIGNAL Sr				: STD_LOGIC;
 SIGNAL PC_inc			: STD_LOGIC_VECTOR(7 DOWNTO 0);
 SIGNAL ALUOp			: STD_LOGIC_VECTOR(1 DOWNTO 0);
 SIGNAL Reg31			: STD_LOGIC_VECTOR(7 DOWNTO 0);
+SIGNAL a1				: STD_LOGIC_VECTOR (31 DOWNTO 0);
+SIGNAL a2				: STD_LOGIC_VECTOR (31 DOWNTO 0);
+SIGNAL a3				: STD_LOGIC_VECTOR (31 DOWNTO 0);
 
 BEGIN
 	LCD_ON <= '1';
@@ -133,7 +139,11 @@ BEGIN
 	clock <= NOT clockPB;
 	
 	-- Inserir MUX para DisplayData
-	DisplayData <= DataInstr WHEN InstrALU = '0' ELSE ALUResult;
+	DisplayData <= ALUResult WHEN InstrALU = "001" ELSE
+	a1 WHEN InstrALU = "010" ELSE
+	a2 WHEN InstrALU = "011" ELSE
+	a3 WHEN InstrALU = "100" ELSE
+	DataInstr;
 	
 	HexDisplayDT <= "0000"&PCAddr&DisplayData;
 
@@ -194,7 +204,10 @@ BEGIN
 					read_data		=> read_data,
 					Jal				=> Jal,
 					L_Address		=> PC_inc,
-					Reg31				=> Reg31);
+					Reg31				=> Reg31,
+					a1					=> a1,
+					a2					=> a2,
+					a3					=> a3);
 					
 	EXE: Execute
 	PORT MAP(	read_data_1		 => readData1,
