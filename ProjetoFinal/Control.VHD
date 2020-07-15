@@ -51,7 +51,7 @@ ARCHITECTURE behavior OF control IS
 		MemRead		<=  LW;
 		MemWrite	<=  SW;
 
-		-- *** ACRECENTE AS ATRIBUIÇÕES ABAIXO
+		-- *** ACRESCENTE AS ATRIBUIÇÕES ABAIXO
 		ALUOp( 1 ) 	<=  R_format;
 		ALUOp( 0 ) 	<=  Beq OR Bne; -- Beq deve ser 1 quando a instrução for BEQ (BNE também)
 END behavior;
